@@ -1,5 +1,11 @@
 import {default as listAudio} from './tracklist.js';
 
+const currentAudio = document.getElementById("audio");
+let indexAudio = 0;
+const timer = document.getElementsByClassName('timer')[0]
+const barProgress = document.getElementById("bar");
+let width = 0;
+
 // создание треклиста
 function createTrackItem(index, name, duration){
   // создаем и добавляем в дерево контейнеры каждого трека в треклисте
@@ -32,10 +38,7 @@ function createTrackItem(index, name, duration){
 for (let i = 0; i < listAudio.length; i++) {
   createTrackItem(i, listAudio[i].name, listAudio[i].duration);
 }
-
-clickListener();
-
-let indexAudio = 0;
+// clickListener();
 
 // выбор трека для проигрывания
 function loadNewTrack(index){
@@ -48,22 +51,19 @@ function loadNewTrack(index){
   toggleAudio();
   updateStylePlaylist(indexAudio, index);
   indexAudio = index;
-  runnigLine()
+  runningLine()
 }
 
 // клик по треку в треклисте, запуск трека
-function clickListener() {
+// function clickListener() {
   const playListItems = document.querySelectorAll(".tracklist__trackContainer");
   for (let i = 0; i < playListItems.length; i++){
-    console.log("listener", playListItems.length)
     playListItems[i].addEventListener("click", getClickedElement.bind(this));
   }
-}
+// }
 
 function getClickedElement(event) {
   const playListItems = document.querySelectorAll(".tracklist__trackContainer");
-  console.log("getClick", playListItems.length)
-  console.log("getClick", playListItems)
   for (let i = 0; i < playListItems.length; i++){
     if(playListItems[i] == event.target){
       const clickedIndex = event.target.getAttribute("data-index");
@@ -80,7 +80,6 @@ document.querySelector('#source-audio').src = listAudio[indexAudio].file;
 document.querySelector('.artist').innerHTML = listAudio[indexAudio].name[0];
 document.querySelector('.song').innerHTML = listAudio[indexAudio].name[1];
 
-const currentAudio = document.getElementById("audio");
 
 currentAudio.load();
 
@@ -89,25 +88,29 @@ document.querySelector('.btn-play').addEventListener('click', toggleAudio);
 // Переключение треков
 function toggleAudio() {
   if (currentAudio.paused) {
+    console.log()
     document.querySelector('.btn-play').style.background = 'rgba(255, 255, 255, .15) url("./images/pause.svg") no-repeat center center';
     document.getElementById('track-' + indexAudio).classList.add("active-track");
-    playToPause(indexAudio)
+    playToPause(indexAudio);
     currentAudio.play();
-    // addRunnigLine();
   } else {
     document.querySelector('.btn-play').style.background = 'rgba(255, 255, 255, .15) url("./images/play.svg") no-repeat 60% center';
-    pauseToPlay(indexAudio)
-    currentAudio.pause();
-    // stopRunningLine();
+    pauseToPlay(indexAudio);
+    const playPromise = currentAudio.play();
+    if (playPromise !== undefined) {
+      playPromise.then(_ => {
+        currentAudio.pause();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    }
+    //  currentAudio.pause();
   }
 }
 
 // запуск таймера песни и прогрессбара
 document.getElementById('audio').addEventListener('timeupdate', onTimeUpdate);
-
-const timer = document.getElementsByClassName('timer')[0]
-const barProgress = document.getElementById("bar");
-let width = 0;
 
 function onTimeUpdate() {
   const t = currentAudio.currentTime;
@@ -160,6 +163,7 @@ function next(){
       loadNewTrack(indexAudio);
   }
 }
+
 function previous(){
   if (indexAudio > 0) {
       let oldIndex = indexAudio;
@@ -180,12 +184,10 @@ function updateStylePlaylist(oldIndex, newIndex){
 function playToPause(index){
   const ele = document.querySelector("#btn-play-" + index);
   ele.setAttribute("src", "./images/track-pause.svg");
-  // runnigLine()
 }
 function pauseToPlay(index){
   const ele = document.querySelector("#btn-play-" + index);
   ele.setAttribute("src", "./images/track-play.svg");
-  // runnigLine()
 }
 
 
@@ -193,7 +195,7 @@ function pauseToPlay(index){
 const containerAnimation = document.querySelector('.marquee');
 const textAnimation = document.querySelectorAll('.marquee span');
 
-function runnigLine(){
+function runningLine(){
   textAnimation.forEach(item => {
     if (item.offsetWidth >= containerAnimation.offsetWidth){
       item.classList.add('running-line');
@@ -236,7 +238,8 @@ function chooseFile() {
       listAudio.push(newSong);
       createTrackItem(listAudio.length - 1, newSong.name, newSong.duration);
 
-      clickListener();
+      const playListItems = document.querySelectorAll(".tracklist__trackContainer");
+      playListItems[playListItems.length - 1].addEventListener("click", getClickedElement.bind(this));
 
       loadNewTrack(listAudio.length - 1);
     });
@@ -253,23 +256,6 @@ class AddAudio {
   }
 }
 
-function initDropzone() {
-  const dropzone = document.getElementById('dropzone');
-
-  dropzone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-  });
-
-  dropzone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const file = e.dataTransfer.files[0];
-      loadToPlayer(file);
-  });
-}
-
 window.onload = () => {
   if(typeof(window.FileReader) == undefined){
     dropzone.textContent = 'Не поддерживается браузером';
@@ -277,6 +263,5 @@ window.onload = () => {
   } else {
     dropzone.innerHTML = `<button>Выберите</button>
     <p>песню для загрузки</p>`;
-    initDropzone();
   }
 }
