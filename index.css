@@ -1,0 +1,278 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap');
+
+html,body{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+body{
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-family: "Jura", sans-serif;
+  color: #fff;
+  background-color: #523026;
+}
+
+.cover{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/* Header */
+/* .header{
+  display: flex;
+  flex-direction: column;
+}
+.header__title{
+  font-size: 4rem;
+  font-weight: 500;
+  letter-spacing: -3,5%;
+  margin: 0;
+}
+.header__subtitle{
+  font-weight: 400;
+  font-size: 2rem;
+  color: rgba(255, 255, 255, .5);
+} */
+
+/* Музыкальный проигрыватель */
+.player-container{
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 450px;
+  padding: 16px 24px;
+  background: linear-gradient(130deg, #885747 0%, #6A3423 100%);
+  border-radius: 30px;
+}
+.player__header {
+  display: flex;
+  align-self: flex-start;
+}
+.logo {
+  color: rgba(255, 255, 255, .5);
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin: 0;
+  margin-left: .7rem;
+}
+
+/* Информация об исполнителе и песни текущего трека */
+.player__info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-self: start;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+.artist {
+  margin: 0;
+  font-weight: 700;
+  font-size: 2.7rem;
+  line-height: .7;
+}
+.song {
+  margin: 0;
+  font-weight: 400;
+  font-size: 2rem;
+  color: rgba(255, 255, 255, .25);
+}
+
+/* Управление аудио */
+/* Прогрессбар */
+.player__progress{
+  margin-bottom: 1.6rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.player__progressBar{
+  width: 85%;
+  background-color: rgba(255, 255, 255, .15); 
+  cursor: pointer;
+  border-radius: 10px;
+  height: 5px;
+  margin-right: 1rem;
+}
+.bar{
+  width: 0%;
+  height: 5px;
+  background-color: rgba(255, 255, 255, .45);
+  border-radius: 10px;
+}
+.timer{
+  color: #B1B1B1;
+  font-weight: bold;
+  font-size: .8rem;
+}
+
+/* Controls */
+.player__navigation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+.btn-action {
+  cursor: pointer;
+  border: none;
+  width: 60px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .15);
+}
+.btn-action:not(:last-of-type){
+  margin-right: 1rem;
+}
+.btn-back {
+  background: rgba(255, 255, 255, .15) url('./images/prev.svg') no-repeat center center;
+}
+.btn-play {
+  width: 90px;
+  background: rgba(255, 255, 255, .15) url('./images/play.svg') no-repeat 60% center;
+}
+.btn-next {
+  background: rgba(255, 255, 255, .15) url('./images/next.svg') no-repeat center center;
+}
+
+/* Треклист */
+.player__tracklist {
+  width: 100%;
+  overflow: auto;
+  margin-bottom: 1rem;
+  padding-right: .5rem;
+}
+.player__tracklist::-webkit-scrollbar{
+  width: .5rem;
+}
+.player__tracklist::-webkit-scrollbar-track{
+  background: rgba(255, 255, 255, .15);
+  border-radius: 8px;
+}
+.player__tracklist::-webkit-scrollbar-thumb{
+  background: rgba(255, 255, 255, .45);
+  border-radius: 8px;
+  width: .5rem;
+}
+.tracklist__trackContainer{
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: .5rem;
+  background: #885747;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.tracklist__trackContainer:not(:last-of-type){
+  margin-bottom: .3rem;
+}
+.active-track{
+  background: #b95e3f;
+  font-weight: bold;
+}
+.active-track > .playlist-info-track,.active-track >.playlist-duration,.active-track > .playlist-btn-play{
+  color: #ffc266 !important;
+}
+.tracklist-info-track,
+.tracklist-btn-play,
+.tracklist-duration,
+.tracklist-marquee {
+  pointer-events: none;
+}
+.artist, .song, .tracklist-info-track{
+  text-wrap: nowrap;
+  overflow: hidden;
+}
+.tracklist-marquee{
+  overflow: hidden;
+}
+
+/* Dropzone */
+.player__dropzone{
+  display: flex;
+  border-radius: 8px;
+  background: #885747;
+  position: relative;
+  bottom: 0;
+  margin-top: auto;
+  padding: 0.5rem;
+}
+.player__dropzone > button{
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-family: "Jura", sans-serif;
+  font-weight: 700;
+  padding: 0;
+  margin-right: 5.4px;
+  cursor: pointer;
+}
+.player__dropzone > p {
+  font-family: "Jura", sans-serif;
+  font-weight: 700;
+  margin: 0rem;
+  cursor: pointer;
+
+}
+
+/* .player__dropzone.error{
+  color: red;
+} */
+
+/* Анимация */
+@-webkit-keyframes scroll {
+  0% {
+      -webkit-transform: translate(0, 0);
+      transform: translate(0, 0);
+  }
+  100% {
+      -webkit-transform: translate(-100%, 0);
+      transform: translate(-100%, 0)
+  }
+}
+
+@-moz-keyframes scroll {
+  0% {
+      -moz-transform: translate(0, 0);
+      transform: translate(0, 0);
+  }
+  100% {
+      -moz-transform: translate(-100%, 0);
+      transform: translate(-100%, 0)
+  }
+}
+
+@keyframes scroll {
+  0% {
+      transform: translate(0, 0);
+  }
+  100% {
+      transform: translate(-100%, 0)
+  }
+}
+.marquee {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 0;
+}
+.running-line{
+  display: inline-block;
+  -webkit-animation: scroll 10s infinite linear;
+  -moz-animation: scroll 10s infinite linear;
+  animation: scroll 10s infinite linear;
+  animation-delay: 5s;
+}
